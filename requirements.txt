@@ -12,3 +12,6 @@ WTForms==2.2.1
 nltk>=3.4.5
 scikit-learn>=0.18
 requests
+Flask==3.0.3
+vaderSentiment==3.3.2
+nltk==3.9.1

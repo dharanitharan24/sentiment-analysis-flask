@@ -1,42 +1,58 @@
 from flask import Flask, request, render_template
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
 from string import punctuation
 import re
 from nltk.corpus import stopwords
 
+# Download NLTK stopwords if not present
 nltk.download('stopwords')
-
-set(stopwords.words('english'))
 
 app = Flask(__name__)
 
-@app.route('/')
-def my_form():
-    return render_template('form.html')
+@app.route('/', methods=['GET', 'POST'])
+def analyze_sentiment():
+    result = None
+    text_input = ""
+    scores = {}
+    sentiment_label = ""
 
-@app.route('/', methods=['POST'])
-def my_form_post():
-    stop_words = stopwords.words('english')
-    
-    #convert to lowercase
-    text1 = request.form['text1'].lower()
-    
-    text_final = ''.join(c for c in text1 if not c.isdigit())
-    
-    #remove punctuations
-    #text3 = ''.join(c for c in text2 if c not in punctuation)
-        
-    #remove stopwords    
-    processed_doc1 = ' '.join([word for word in text_final.split() if word not in stop_words])
+    if request.method == 'POST':
+        stop_words = set(stopwords.words('english'))
 
-    sa = SentimentIntensityAnalyzer()
-    dd = sa.polarity_scores(text=processed_doc1)
-    compound = round((1 + dd['compound'])/2, 2)
+        # Step 1: Get text input and clean it
+        text_input = request.form['text1']
+        text_clean = text_input.lower()
+        text_clean = re.sub(r'\d+', '', text_clean)  # remove digits
+        text_clean = ''.join(c for c in text_clean if c not in punctuation)
+        text_clean = ' '.join(word for word in text_clean.split() if word not in stop_words)
 
-    return render_template('form.html', final=compound, text1=text_final,text2=dd['pos'],text5=dd['neg'],text4=compound,text3=dd['neu'])
+        # Step 2: Perform sentiment analysis
+        analyzer = SentimentIntensityAnalyzer()
+        scores = analyzer.polarity_scores(text_clean)
+        compound = scores['compound']
+
+        # Normalize compound to a 0–1 range if needed
+        normalized = round((1 + compound) / 2, 2)
+
+        # Step 3: Determine sentiment label
+        if compound >= 0.05:
+            sentiment_label = "Positive"
+        elif compound <= -0.05:
+            sentiment_label = "Negative"
+        else:
+            sentiment_label = "Neutral"
+
+        result = {
+            'final': normalized,
+            'pos': scores['pos'],
+            'neu': scores['neu'],
+            'neg': scores['neg'],
+            'compound': compound,
+            'sentiment_label': sentiment_label
+        }
+
+    return render_template('form.html', text_input=text_input, result=result)
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5002, threaded=True)
