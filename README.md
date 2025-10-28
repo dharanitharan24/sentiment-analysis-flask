@@ -1,7 +1,3 @@
-Below is a simplified and attractive version of the README for the **Sentiment-Analysis-ML-Flask-App**. It uses clear, professional, and engaging language, avoids technical Git commands, and focuses on accessibility while maintaining a formal tone. The structure is streamlined to highlight the project's purpose, features, and technologies without overwhelming the reader.
-
----
-
 # Sentiment Analysis ML Flask App
 
 Discover the **Sentiment Analysis ML Flask App**, a powerful web application that uses machine learning to uncover emotions in text! Built with **Scikit-learn** and **VADER Sentiment**, this app analyzes sentiments in social media posts, product reviews, and more, helping you understand opinions with ease.
