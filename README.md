@@ -77,7 +77,7 @@ We’d love your help to make this project even better! Whether it’s adding fe
 
 ## 📬 Contact Us
 
-Have questions or ideas? Email us at [your-email@example.com](mailto:your-email@example.com) or connect via the project repository. Let’s shape the future of sentiment analysis together!
+Have questions or ideas? Email us at [dharanitharan2410@gmail.com](mailto:your-dharanitharan2410@gmail.com) or connect via the project repository. Let’s shape the future of sentiment analysis together!
 
 ---
 
